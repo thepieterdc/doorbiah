@@ -1,7 +1,15 @@
 gulp = require 'gulp'
+babel = require 'gulp-babel'
+coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
+copy = require 'gulp-copy'
+merge = require 'merge2'
 minify = require 'gulp-clean-css'
 sass = require 'gulp-sass'
+uglify = require 'gulp-uglify'
+
+coffeeIn = 'pub/**/*.coffee'
+coffeeOut = ['public/scripts', 'combined.min.js']
 
 ### CSS ###
 cssIn = ['node_modules/bootswatch/cosmo/bootstrap.min.css', 'assets/css/src/**/*.sass']
