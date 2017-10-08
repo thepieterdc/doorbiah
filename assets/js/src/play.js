@@ -9,6 +9,6 @@ $(document).ready(function() {
 	
 	game.draw();
 	
-	// show_alert('Gebuisd!', 'Je bent gefaald. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.');
-	// show_alert('Game over.', 'Ja kijk euh ge hebt het of ge hebt het niet, en gij hebt het duidelijk niet. Vakken meenemen doet Tobiah niet aan.');
+	// show_alert('Gebuisd!', 'Je hebt gefaalt. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.');
+	// show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
 });
