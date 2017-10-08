@@ -3,8 +3,8 @@ const $scoreDisplay = $("#score-display");
 const Branddeur = function (canvas, x, y, dx, dy) {
 	const self = this;
 	
-	this.width = 28.48;
-	this.height = 32;
+	this.width = 56.96;
+	this.height = 64;
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
@@ -41,8 +41,8 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 const Head = function (canvas) {
 	const self = this;
 	
-	this.height = 30;
-	this.width = 24.9;
+	this.height = 60;
+	this.width = 49.8;
 	this.x = canvas.width / 2 - this.width / 2;
 	this.y = canvas.height / 2 - this.height / 2;
 	this.loaded = false;
@@ -50,8 +50,8 @@ const Head = function (canvas) {
 	this.open_image = null;
 	this.mouth_status = false;
 	
-	this.DX = 3;
-	this.DY = 3;
+	this.DX = 4;
+	this.DY = 4;
 	
 	this.herexamen = false;
 	
@@ -168,8 +168,8 @@ const Game = function (canvas, ctx) {
 			speed_x = 0;
 			speed_y = 0;
 			while (speed_x === 0 && speed_y === 0) {
-				speed_x = Math.random() * 4 * (start_x === 0 ? 1 : -1);
-				speed_y = Math.random() * 4 * (start_y === 0 ? 1 : -1);
+				speed_x = Math.random() * 6 * (start_x === 0 ? 1 : -1);
+				speed_y = Math.random() * 6 * (start_y === 0 ? 1 : -1);
 			}
 			
 			self.branddeuren.push(new Branddeur(canvas, start_x, start_y, speed_x, speed_y));
