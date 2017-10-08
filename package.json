@@ -1,0 +1,31 @@
+{
+  "name": "doorbiah",
+  "version": "1.0.0",
+  "description": "Tobiahs 2017 birthday present",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thepieterdc/doorbiah.git"
+  },
+  "author": "Pieter De Clercq <pieterdeclercq@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thepieterdc/doorbiah/issues"
+  },
+  "homepage": "https://github.com/thepieterdc/doorbiah#readme",
+  "dependencies": {
+    "babel-core": "^7.0.0-beta.1",
+    "bootswatch": "^4.0.0-alpha.6",
+    "coffeescript": "^2.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-coffee": "^2.3.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-copy": "^1.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "merge2": "^1.2.0"
+  },
+  "private": true
+}
