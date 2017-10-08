@@ -14,7 +14,7 @@ cssOut = ['assets/css', 'combined.min.css']
 ### JS ###
 jsIn = 'assets/js/src/**/*.js'
 jsOut = ['assets/js', 'combined.min.js']
-vendorIn = ['node_modules/jquery/dist/jquery.min.js']
+vendorIn = ['node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js']
 vendorOut = ['assets/js', 'vendor.min.js']
 
 gulp.task 'css', () ->
