@@ -79,7 +79,11 @@ const Game = function (canvas, ctx) {
 	};
 	
 	this.updateScore = function () {
-		$scoreDisplay.text(self.score);
+		if(self.score !== 0) {
+			$scoreDisplay.text(self.score+'/'+(self.score*10)+' (= 2/20)');
+		} else {
+			$scoreDisplay.text('2/20');
+		}
 	};
 	
 	this.draw = function () {
