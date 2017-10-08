@@ -3,8 +3,8 @@ const $scoreDisplay = $("#score-display");
 const Branddeur = function (canvas, x, y, dx, dy) {
 	const self = this;
 	
-	this.width = 28.48;
-	this.height = 32;
+	this.width = 56.96;
+	this.height = 64;
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
@@ -49,15 +49,15 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 			collideRect(head, 1  , 0  , 0.7, 0.2)
 		);
 	};
-
+	
 	this.load_image();
 };
 
 const Head = function (canvas) {
 	const self = this;
 	
-	this.height = 30;
-	this.width = 24.9;
+	this.height = 60;
+	this.width = 49.8;
 	this.x = canvas.width / 2 - this.width / 2;
 	this.y = canvas.height / 2 - this.height / 2;
 	this.loaded = false;
@@ -65,11 +65,8 @@ const Head = function (canvas) {
 	this.open_image = null;
 	this.mouth_status = false;
 	
-	this.DX = 3;
-	this.DY = 3;
-	
-	this.herexamen = false;
-	
+	this.DX = 4;
+	this.DY = 4;
 	
 	this.INACTIVE = 0;
 	this.SUPPRESSED = 1;
@@ -151,7 +148,7 @@ const Head = function (canvas) {
 	this.load_images();
 };
 
-const Game = function (canvas, ctx) {
+const Game = function (canvas, ctx, doneFn) {
 	const self = this;
 	this.canvas = canvas;
 	this.ctx = ctx;
@@ -160,8 +157,20 @@ const Game = function (canvas, ctx) {
 	
 	this.head = new Head(canvas);
 	
+	this.herexamen = false;
+	this.paused = false;
+	
 	this.branddeuren = [];
 	this.branddeur_counter = 60;
+	
+	this.started = false;
+	
+	this.startScreenImageLoaded = false;
+	this.startScreenImage = new Image();
+	this.startScreenImage.src = 'assets/images/startscreen.png';
+	this.startScreenImage.onload = function () {
+		self.startScreenImageLoaded = true;
+	};
 	
 	this.addBranddeur = function () {
 		let start_x;
@@ -175,8 +184,8 @@ const Game = function (canvas, ctx) {
 			speed_x = 0;
 			speed_y = 0;
 			while (speed_x === 0 && speed_y === 0) {
-				speed_x = Math.random() * 4 * (start_x === 0 ? 1 : -1);
-				speed_y = Math.random() * 4 * (start_y === 0 ? 1 : -1);
+				speed_x = Math.random() * 6 * (start_x === 0 ? 1 : -1);
+				speed_y = Math.random() * 6 * (start_y === 0 ? 1 : -1);
 			}
 
 			self.branddeuren.push(new Branddeur(canvas, start_x, start_y, speed_x, speed_y));
@@ -201,9 +210,19 @@ const Game = function (canvas, ctx) {
 		}
 	};
 	
+	this.drawStartScreen = function () {
+		if (self.startScreenImageLoaded) {
+			self.ctx.drawImage(self.startScreenImage, 0, 0, canvas.width, canvas.height);
+		}
+	};
+	
 	this.keyDownHandler = function (e) {
 		if (e.keyCode === 32) { // Space
-			self.head.toggle_mouth(true);
+			if (self.started) {
+				self.head.toggle_mouth(true);
+			} else {
+				self.started = true;
+			}
 		}
 		
 		if (e.keyCode === 37) { // ←
@@ -276,30 +295,46 @@ const Game = function (canvas, ctx) {
 			}
 		}
 	};
-
+	
 	this.checkCollision = function () {
 		self.branddeuren.forEach(branddeur => branddeur.collides(self.head) && self.gameOver());
 	};
-
-	let counter = 0;
-	this.gameOver = function() {
-		console.log(`Collision ${++counter}`);
+	
+	this.gameOver = function () {
+		self.paused = true;
+		self.lives--;
+		if (self.lives === 1) {
+			show_alert('Gebuisd!', 'Je hebt gefaalt. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.', function () {
+				self.paused = false;
+			});
+			self.herexamen = true;
+			self.branddeuren.length = 0;
+		} else if (self.lives === 0) {
+			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
+			if (typeof doneFn !== "undefined") {
+				doneFn();
+			}
+		}
 	};
-
+	
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
-		
-		self.addBranddeur();
-		self.updateHead();
-		self.updateBranddeuren();
-
-		self.checkCollision();
-
-		self.updateScore();
-		
-		self.drawHead();
-		self.drawBranddeuren();
-		
+		if (self.started) {
+			if (!self.paused) {
+				self.addBranddeur();
+				self.updateHead();
+				self.updateBranddeuren();
+				
+				self.checkCollision();
+				
+				self.updateScore();
+				
+				self.drawBranddeuren();
+			}
+			self.drawHead();
+		} else {
+			self.drawStartScreen();
+		}
 		requestAnimationFrame(self.draw);
 	};
 };

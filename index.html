@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1"/>
     <title>Doorbiah</title>
 
     <link rel="icon" href="assets/images/favicon.png"/>
@@ -24,11 +25,28 @@
 </div>
 
 <div class="container">
-    <div class="row">
+    <div class="row" id="creditspanel">
+        <div class="col-8">
+            <div class="card">
+                <h3 class="card-header bg-primary">Credits</h3>
+                <div class="card-block">
+                    <h1 style="margin-bottom: 2%;text-decoration: blink;">Gelukkige verjaardag!</h1>
+                    <ul>
+                        <li><strong>thepieterdc:</strong> Idee en uitwerking</li>
+                        <li><strong>M1dgard:</strong> Uitwerking en brantdeur graphics</li>
+                        <li><strong>Joachim:</strong> Graphics van Tobiah's hoofd</li>
+                        <li><strong style="font-size:larger">Tobiah:</strong> Jarig zijn, de branddeur legacy starten
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="playpanel">
         <div class="col-8">
             <div class="card">
                 <h3 class="card-header bg-primary">Doorbiah</h3>
-                <div class="card-block" style="padding:0">
+                <div class="card-block" id="gamepanel-container" style="padding:0">
                     <canvas id="gamepanel"></canvas>
                 </div>
             </div>
@@ -47,7 +65,9 @@
                     <div class="card">
                         <h3 class="card-header bg-primary">Spelregels</h3>
                         <div class="card-block">
-                            Bestuur Tobiah's hoofd met je pijltjestoetsen en probeer heldhaftig alle branddeuren te ontwijken. Druk op spatiebalk om Tobiah's mond open en dicht te doen, dit heeft geen praktisch nut maar ik vond dat leuk.
+                            Bestuur Tobiah's hoofd met je pijltjestoetsen en probeer heldhaftig alle branddeuren te
+                            ontwijken. Druk op spatiebalk om Tobiah's mond open en dicht te doen, dit heeft geen
+                            praktisch nut maar ik vond dat leuk.
                         </div>
                     </div>
                 </div>
