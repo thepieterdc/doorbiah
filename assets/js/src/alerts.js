@@ -13,3 +13,7 @@ window.show_alert = function (title, body, closeFn) {
 		}
 	});
 };
+
+$(document).ready(function () {
+	document.addEventListener("keypress", ev => {(ev.keyCode === 27 || ev.keyCode === 13) && $alertsBox.modal('hide')}, false);
+});
