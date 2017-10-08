@@ -120,8 +120,9 @@ const Game = function (canvas, ctx) {
 	};
 	
 	this.updateScore = function () {
+		self.score += 0.03;
 		if (self.score !== 0) {
-			$scoreDisplay.text(self.score + '/' + (self.score * 10) + ' (= 2/20)');
+			$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score) * 10) + ' (= 2/20)');
 		} else {
 			$scoreDisplay.text('2/20');
 		}
