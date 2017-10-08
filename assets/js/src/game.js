@@ -270,8 +270,8 @@ const Game = function (canvas, ctx) {
 		self.updateBranddeuren();
 		self.updateScore();
 		
-		self.drawHead();
 		self.drawBranddeuren();
+		self.drawHead();
 		
 		requestAnimationFrame(self.draw);
 	}
