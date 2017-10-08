@@ -152,7 +152,7 @@ const Game = function (canvas, ctx) {
 	this.startScreenImageLoaded = false;
 	this.startScreenImage = new Image();
 	this.startScreenImage.src = 'assets/images/startscreen.png';
-	this.startScreenImage.onload = function() {
+	this.startScreenImage.onload = function () {
 		self.startScreenImageLoaded = true;
 	};
 	
@@ -202,7 +202,11 @@ const Game = function (canvas, ctx) {
 	
 	this.keyDownHandler = function (e) {
 		if (e.keyCode === 32) { // Space
-			self.head.toggle_mouth(true);
+			if (self.started) {
+				self.head.toggle_mouth(true);
+			} else {
+				self.started = true;
+			}
 		}
 		
 		if (e.keyCode === 37) { // ←
