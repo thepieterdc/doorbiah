@@ -6,17 +6,32 @@ const Head = function (canvas) {
 	this.height = 30;
 	this.width = 24.9;
 	this.x = canvas.width / 2 - this.width / 2;
-	this.y = canvas.height / 2 - this.height/2;
+	this.y = canvas.height / 2 - this.height / 2;
 	this.loaded = false;
 	this.closed_image = null;
 	this.open_image = null;
 	this.mouth_status = false;
+
+	this.DX = 3;
+	this.DY = 3;
 	
-	this.moveLeft = false;
-	this.moveRight = false;
-	this.moveUp = false;
-	this.moveDown = false;
-	
+	this.INACTIVE   = 0;
+	this.SUPPRESSED = 1;
+	this.ACTIVE     = 2;
+
+	this.movement = {
+		"left":  this.INACTIVE,
+		"right": this.INACTIVE,
+		"up":    this.INACTIVE,
+		"down":  this.INACTIVE
+	};
+	this.OPPOSITES = {
+		"left":  "right",
+		"right": "left",
+		"up":    "down",
+		"down":  "up"
+	};
+
 	this.getImage = function () {
 		return self.mouth_status ? self.open_image : self.closed_image;
 	};
@@ -37,19 +52,43 @@ const Head = function (canvas) {
 		self.mouth_status = status;
 	};
 	
+	this.activateDirection = function (direction) {
+		this.movement[direction] = this.ACTIVE;
+
+		// If the opposite direction is active, suppress it
+		let opDir = this.OPPOSITES[direction];
+		if (this.movement[opDir] === this.ACTIVE) {
+			this.movement[opDir] = this.SUPPRESSED;
+		}
+	};
+
+	this.deactivateDirection = function (direction) {
+		this.movement[direction] = this.INACTIVE;
+
+		// If the opposite direction is still suppressed, re-activate it
+		let opDir = this.OPPOSITES[direction];
+		if (this.movement[opDir] === this.SUPPRESSED) {
+			this.movement[opDir] = this.ACTIVE;
+		}
+	};
+	
 	this.updatePosition = function () {
-		let dx = self.moveLeft ? -3 : 0;
-		dx = self.moveRight ? 3 : dx;
-		
+		let dx, dy;
+
+		if (this.movement["left"] === this.ACTIVE)
+			dx = -this.DX;
+		else if (this.movement["right"] === this.ACTIVE)
+			dx = this.DX;
 		if (self.x + dx > 0 && self.x + dx + self.width < canvas.width) {
 			self.x += dx;
 		}
-		
-		let dy = self.moveUp ? 3 : 0;
-		dy = self.moveDown ? -3 : dy;
-		
-		if (self.y - dy > 0 && self.y - dy + self.height < canvas.height) {
-			self.y -= dy;
+
+		if (this.movement["up"] === this.ACTIVE)
+			dy = -this.DY;
+		else if (this.movement["down"] === this.ACTIVE)
+			dy = this.DY;
+		if (self.y + dy > 0 && self.y + dy + self.height < canvas.height) {
+			self.y += dy;
 		}
 	};
 	
@@ -72,46 +111,46 @@ const Game = function (canvas, ctx) {
 	};
 	
 	this.keyDownHandler = function (e) {
-		if (e.keyCode === 32) {
+		if (e.keyCode === 32) { // Space
 			self.head.toggle_mouth(true);
 		}
 		
-		if (e.keyCode === 37) {
-			self.head.moveLeft = true;
+		if (e.keyCode === 37) { // ←
+			self.head.activateDirection("left");
 		}
 		
-		if (e.keyCode === 38) {
-			self.head.moveUp = true;
+		if (e.keyCode === 38) { // ↑
+			self.head.activateDirection("up");
 		}
 		
-		if (e.keyCode === 39) {
-			self.head.moveRight = true;
+		if (e.keyCode === 39) { // →
+			self.head.activateDirection("right");
 		}
 		
-		if (e.keyCode === 40) {
-			self.head.moveDown = true;
+		if (e.keyCode === 40) { // ↓
+			self.head.activateDirection("down");
 		}
 	};
 	
 	this.keyUpHandler = function (e) {
-		if (e.keyCode === 32) {
+		if (e.keyCode === 32) { // Space
 			self.head.toggle_mouth(false);
 		}
 		
-		if (e.keyCode === 37) {
-			self.head.moveLeft = false;
+		if (e.keyCode === 37) { // ←
+			self.head.deactivateDirection("left");
 		}
 		
-		if (e.keyCode === 38) {
-			self.head.moveUp = false;
+		if (e.keyCode === 38) { // ↑
+			self.head.deactivateDirection("up");
 		}
 		
-		if (e.keyCode === 39) {
-			self.head.moveRight = false;
+		if (e.keyCode === 39) { // →
+			self.head.deactivateDirection("right");
 		}
 		
-		if (e.keyCode === 40) {
-			self.head.moveDown = false;
+		if (e.keyCode === 40) { // ↓
+			self.head.deactivateDirection("down");
 		}
 	};
 	
