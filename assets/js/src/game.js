@@ -3,8 +3,8 @@ const $scoreDisplay = $("#score-display");
 const Branddeur = function (canvas, x, y, dx, dy) {
 	const self = this;
 	
-	this.width = 56.96;
-	this.height = 64;
+	this.width = 75;
+	this.height = 84.2696632;
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
