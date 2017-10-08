@@ -5,8 +5,8 @@ const Head = function (canvas) {
 	
 	this.height = 30;
 	this.width = 24.9;
-	this.x = canvas.width / 2;
-	this.y = canvas.height / 2;
+	this.x = canvas.width / 2 - this.width / 2;
+	this.y = canvas.height / 2 - this.height/2;
 	this.loaded = false;
 	this.closed_image = null;
 	this.open_image = null;
