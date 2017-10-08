@@ -35,12 +35,19 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 		}
 	};
 
-	this.collides = function (head) {
-		let headX = head.x + head.width/2,
-			headY = head.y + head.height/2;
+	let collideRect = function (head, c1, c2, c3, c4) {
+		return (
+			head.x + c1*head.width  > self.x  &&  head.x + c2*head.width  < self.x + self.width  &&
+			head.y + c3*head.height > self.y  &&  head.y + c4*head.height < self.y + self.height
+		);
+	};
 
-		return (headX > self.x && headX < self.x + self.width &&
-				headY > self.y && headY < self.y + self.height);
+	this.collides = function (head) {
+		return (
+			collideRect(head, 0.8, 0.2, 1  , 0  ) ||
+			collideRect(head, 0.9, 0.1, 0.2, 0.1) ||
+			collideRect(head, 1  , 0  , 0.7, 0.2)
+		);
 	};
 
 	this.load_image();
@@ -164,16 +171,16 @@ const Game = function (canvas, ctx) {
 		if (self.branddeur_counter === 0) {
 			start_x = Math.random() > 0.5 ? 0 : canvas.width;
 			start_y = Math.random() > 0.5 ? 0 : canvas.height;
-			
+
 			speed_x = 0;
 			speed_y = 0;
 			while (speed_x === 0 && speed_y === 0) {
 				speed_x = Math.random() * 4 * (start_x === 0 ? 1 : -1);
 				speed_y = Math.random() * 4 * (start_y === 0 ? 1 : -1);
 			}
-			
+
 			self.branddeuren.push(new Branddeur(canvas, start_x, start_y, speed_x, speed_y));
-			
+
 			self.branddeur_counter = 60;
 		} else {
 			self.branddeur_counter--;
@@ -272,12 +279,12 @@ const Game = function (canvas, ctx) {
 
 	this.checkCollision = function () {
 		self.branddeuren.forEach(branddeur => branddeur.collides(self.head) && self.gameOver());
-	}
+	};
 
 	let counter = 0;
 	this.gameOver = function() {
 		console.log(`Collision ${++counter}`);
-	}
+	};
 
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
@@ -294,7 +301,7 @@ const Game = function (canvas, ctx) {
 		self.drawBranddeuren();
 		
 		requestAnimationFrame(self.draw);
-	}
+	};
 };
 
 window.Game = Game;
