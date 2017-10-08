@@ -1,5 +1,27 @@
 const $scoreDisplay = $("#score-display");
 
+const Branddeur = function (canvas, x, y, dx, dy) {
+	const self = this;
+	
+	this.width = 26.0949033;
+	this.height = 29;
+	this.x = x;
+	this.y = y;
+	this.dx = dx;
+	this.dy = dy;
+	
+	this.loaded = false;
+	this.image = null;
+	
+	this.load_image = function () {
+		self.image = new Image();
+		self.image.src = 'assets/images/brantdeur.png';
+		self.image.onload = function () {
+			self.loaded = true;
+		}
+	};
+};
+
 const Head = function (canvas) {
 	const self = this;
 	
@@ -11,6 +33,8 @@ const Head = function (canvas) {
 	this.closed_image = null;
 	this.open_image = null;
 	this.mouth_status = false;
+	
+	this.herexamen = false;
 	
 	this.moveLeft = false;
 	this.moveRight = false;
@@ -122,9 +146,17 @@ const Game = function (canvas, ctx) {
 	this.updateScore = function () {
 		self.score += 0.03;
 		if (self.score !== 0) {
-			$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score) * 10) + ' (= 2/20)');
+			if(self.herexamen) {
+				$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score * 1.42857143) + ' (= 14/20)');
+			} else {
+				$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score) * 10) + ' (= 2/20)');
+			}
 		} else {
-			$scoreDisplay.text('2/20');
+			if(self.herexamen) {
+				$scoreDisplay.text('14/20');
+			} else {
+				$scoreDisplay.text('2/20');
+			}
 		}
 	};
 	
