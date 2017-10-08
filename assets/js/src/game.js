@@ -55,7 +55,6 @@ const Head = function (canvas) {
 	
 	this.herexamen = false;
 	
-	
 	this.INACTIVE = 0;
 	this.SUPPRESSED = 1;
 	this.ACTIVE = 2;
@@ -148,6 +147,15 @@ const Game = function (canvas, ctx) {
 	this.branddeuren = [];
 	this.branddeur_counter = 60;
 	
+	this.started = false;
+	
+	this.startScreenImageLoaded = false;
+	this.startScreenImage = new Image();
+	this.startScreenImage.src = 'assets/images/startscreen.png';
+	this.startScreenImage.onload = function() {
+		self.startScreenImageLoaded = true;
+	};
+	
 	this.addBranddeur = function () {
 		let start_x;
 		let start_y;
@@ -183,6 +191,12 @@ const Game = function (canvas, ctx) {
 	this.drawHead = function () {
 		if (self.head.loaded) {
 			self.ctx.drawImage(self.head.getImage(), self.head.x, self.head.y, self.head.width, self.head.height);
+		}
+	};
+	
+	this.drawStartScreen = function () {
+		if (self.startScreenImageLoaded) {
+			self.ctx.drawImage(self.startScreenImage, 0, 0, canvas.width, canvas.height);
 		}
 	};
 	
@@ -265,13 +279,17 @@ const Game = function (canvas, ctx) {
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
 		
-		self.addBranddeur();
-		self.updateHead();
-		self.updateBranddeuren();
-		self.updateScore();
-		
-		self.drawHead();
-		self.drawBranddeuren();
+		if (self.started) {
+			self.addBranddeur();
+			self.updateHead();
+			self.updateBranddeuren();
+			self.updateScore();
+			
+			self.drawHead();
+			self.drawBranddeuren();
+		} else {
+			self.drawStartScreen();
+		}
 		
 		requestAnimationFrame(self.draw);
 	}

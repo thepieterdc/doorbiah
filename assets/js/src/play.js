@@ -9,6 +9,10 @@ $(document).ready(function() {
 	
 	game.draw();
 	
+	// if(window.devicePixelRatio) {
+	// 	context.scale(window.devicePixelRatio, window.devicePixelRatio);
+	// }
+	
 	// show_alert('Gebuisd!', 'Je bent gefaald. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.');
 	// show_alert('Game over.', 'Ja kijk euh ge hebt het of ge hebt het niet, en gij hebt het duidelijk niet. Vakken meenemen doet Tobiah niet aan.');
 });
