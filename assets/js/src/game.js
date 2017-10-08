@@ -12,8 +12,10 @@ const Head = function (canvas) {
 	this.open_image = null;
 	this.mouth_status = false;
 	
-	this.dx = 0;
-	this.dy = 0;
+	this.moveLeft = false;
+	this.moveRight = false;
+	this.moveUp = false;
+	this.moveDown = false;
 	
 	this.getImage = function () {
 		return self.mouth_status ? self.open_image : self.closed_image;
@@ -23,7 +25,6 @@ const Head = function (canvas) {
 		self.closed_image = new Image();
 		self.closed_image.src = 'assets/images/tobiah_closed.png';
 		self.closed_image.onload = function () {
-			console.log("woehoew");
 			self.open_image = new Image();
 			self.open_image.src = 'assets/images/tobiah_open.png';
 			self.open_image.onload = function () {
@@ -36,12 +37,30 @@ const Head = function (canvas) {
 		self.mouth_status = status;
 	};
 	
+	this.updatePosition = function () {
+		let dx = self.moveLeft ? -3 : 0;
+		dx = self.moveRight ? 3 : dx;
+		
+		if (self.x_center() + dx > 0 && self.x_center() + dx < canvas.width) {
+			self.x += dx;
+		}
+		
+		let dy = self.moveUp ? 3 : 0;
+		dy = self.moveDown ? -3 : dy;
+		
+		if (self.y_center() - dy > 0 && self.y - dy < canvas.height) {
+			console.log(self.y);
+			console.log(canvas.height);
+			self.y -= dy;
+		}
+	};
+	
 	this.x_center = function () {
-		return self.x - self.width / 2;
+		return self.x - (self.width / 2);
 	};
 	
 	this.y_center = function () {
-		return self.y - self.height / 2;
+		return self.y - (self.height / 2);
 	};
 	
 	this.load_images();
@@ -66,21 +85,53 @@ const Game = function (canvas, ctx) {
 		if (e.keyCode === 32) {
 			self.head.toggle_mouth(true);
 		}
+		
+		if (e.keyCode === 37) {
+			self.head.moveLeft = true;
+		}
+		
+		if (e.keyCode === 38) {
+			self.head.moveUp = true;
+		}
+		
+		if (e.keyCode === 39) {
+			self.head.moveRight = true;
+		}
+		
+		if (e.keyCode === 40) {
+			self.head.moveDown = true;
+		}
 	};
 	
 	this.keyUpHandler = function (e) {
 		if (e.keyCode === 32) {
 			self.head.toggle_mouth(false);
 		}
+		
+		if (e.keyCode === 37) {
+			self.head.moveLeft = false;
+		}
+		
+		if (e.keyCode === 38) {
+			self.head.moveUp = false;
+		}
+		
+		if (e.keyCode === 39) {
+			self.head.moveRight = false;
+		}
+		
+		if (e.keyCode === 40) {
+			self.head.moveDown = false;
+		}
 	};
 	
-	this.moveHead = function () {
-	
+	this.updateHead = function () {
+		self.head.updatePosition();
 	};
 	
 	this.updateScore = function () {
-		if(self.score !== 0) {
-			$scoreDisplay.text(self.score+'/'+(self.score*10)+' (= 2/20)');
+		if (self.score !== 0) {
+			$scoreDisplay.text(self.score + '/' + (self.score * 10) + ' (= 2/20)');
 		} else {
 			$scoreDisplay.text('2/20');
 		}
@@ -89,8 +140,10 @@ const Game = function (canvas, ctx) {
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
 		
-		self.drawHead();
+		self.updateHead();
 		self.updateScore();
+		
+		self.drawHead();
 		
 		requestAnimationFrame(self.draw);
 	}
