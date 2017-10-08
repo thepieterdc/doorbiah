@@ -34,15 +34,15 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 			self.out_of_bounds = true;
 		}
 	};
-
+	
 	this.collides = function (head) {
-		let headX = head.x + head.width/2,
-			headY = head.y + head.height/2;
-
+		let headX = head.x + head.width / 2,
+			headY = head.y + head.height / 2;
+		
 		return (headX > self.x && headX < self.x + self.width &&
-				headY > self.y && headY < self.y + self.height);
+			headY > self.y && headY < self.y + self.height);
 	};
-
+	
 	this.load_image();
 };
 
@@ -60,9 +60,6 @@ const Head = function (canvas) {
 	
 	this.DX = 3;
 	this.DY = 3;
-	
-	this.herexamen = false;
-	
 	
 	this.INACTIVE = 0;
 	this.SUPPRESSED = 1;
@@ -144,7 +141,7 @@ const Head = function (canvas) {
 	this.load_images();
 };
 
-const Game = function (canvas, ctx) {
+const Game = function (canvas, ctx, doneFn) {
 	const self = this;
 	this.canvas = canvas;
 	this.ctx = ctx;
@@ -152,6 +149,9 @@ const Game = function (canvas, ctx) {
 	this.lives = 2;
 	
 	this.head = new Head(canvas);
+	
+	this.herexamen = false;
+	this.paused = false;
 	
 	this.branddeuren = [];
 	this.branddeur_counter = 60;
@@ -269,30 +269,42 @@ const Game = function (canvas, ctx) {
 			}
 		}
 	};
-
+	
 	this.checkCollision = function () {
 		self.branddeuren.forEach(branddeur => branddeur.collides(self.head) && self.gameOver());
-	}
-
-	let counter = 0;
-	this.gameOver = function() {
-		console.log(`Collision ${++counter}`);
-	}
-
+	};
+	
+	this.gameOver = function () {
+		self.paused = true;
+		self.lives--;
+		if (self.lives === 1) {
+			show_alert('Gebuisd!', 'Je hebt gefaalt. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.', function () {
+				self.paused = false;
+			});
+			self.herexamen = true;
+			self.branddeuren.length = 0;
+		} else if (self.lives === 0) {
+			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
+			if (typeof doneFn !== "undefined") {
+				doneFn();
+			}
+		}
+	};
+	
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
-		
-		self.addBranddeur();
-		self.updateHead();
-		self.updateBranddeuren();
-
-		self.checkCollision();
-
-		self.updateScore();
-		
+		if (!self.paused) {
+			self.addBranddeur();
+			self.updateHead();
+			self.updateBranddeuren();
+			
+			self.checkCollision();
+			
+			self.updateScore();
+			
+			self.drawBranddeuren();
+		}
 		self.drawHead();
-		self.drawBranddeuren();
-		
 		requestAnimationFrame(self.draw);
 	}
 };
