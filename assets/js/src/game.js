@@ -34,6 +34,21 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 			self.out_of_bounds = true;
 		}
 	};
+
+	let collideRect = function (head, c1, c2, c3, c4) {
+		return (
+			head.x + c1*head.width  > self.x  &&  head.x + c2*head.width  < self.x + self.width  &&
+			head.y + c3*head.height > self.y  &&  head.y + c4*head.height < self.y + self.height
+		);
+	};
+
+	this.collides = function (head) {
+		return (
+			collideRect(head, 0.8, 0.2, 1  , 0  ) ||
+			collideRect(head, 0.9, 0.1, 0.2, 0.1) ||
+			collideRect(head, 1  , 0  , 0.7, 0.2)
+		);
+	};
 	
 	this.load_image();
 };
@@ -52,8 +67,6 @@ const Head = function (canvas) {
 	
 	this.DX = 4;
 	this.DY = 4;
-	
-	this.herexamen = false;
 	
 	this.INACTIVE = 0;
 	this.SUPPRESSED = 1;
@@ -135,7 +148,7 @@ const Head = function (canvas) {
 	this.load_images();
 };
 
-const Game = function (canvas, ctx) {
+const Game = function (canvas, ctx, doneFn) {
 	const self = this;
 	this.canvas = canvas;
 	this.ctx = ctx;
@@ -143,6 +156,9 @@ const Game = function (canvas, ctx) {
 	this.lives = 2;
 	
 	this.head = new Head(canvas);
+	
+	this.herexamen = false;
+	this.paused = false;
 	
 	this.branddeuren = [];
 	this.branddeur_counter = 60;
@@ -164,16 +180,16 @@ const Game = function (canvas, ctx) {
 		if (self.branddeur_counter === 0) {
 			start_x = Math.random() > 0.5 ? 0 : canvas.width;
 			start_y = Math.random() > 0.5 ? 0 : canvas.height;
-			
+
 			speed_x = 0;
 			speed_y = 0;
 			while (speed_x === 0 && speed_y === 0) {
 				speed_x = Math.random() * 6 * (start_x === 0 ? 1 : -1);
 				speed_y = Math.random() * 6 * (start_y === 0 ? 1 : -1);
 			}
-			
+
 			self.branddeuren.push(new Branddeur(canvas, start_x, start_y, speed_x, speed_y));
-			
+
 			self.branddeur_counter = 60;
 		} else {
 			self.branddeur_counter--;
@@ -280,23 +296,47 @@ const Game = function (canvas, ctx) {
 		}
 	};
 	
+	this.checkCollision = function () {
+		self.branddeuren.forEach(branddeur => branddeur.collides(self.head) && self.gameOver());
+	};
+	
+	this.gameOver = function () {
+		self.paused = true;
+		self.lives--;
+		if (self.lives === 1) {
+			show_alert('Gebuisd!', 'Je hebt gefaalt. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.', function () {
+				self.paused = false;
+			});
+			self.herexamen = true;
+			self.branddeuren.length = 0;
+		} else if (self.lives === 0) {
+			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
+			if (typeof doneFn !== "undefined") {
+				doneFn();
+			}
+		}
+	};
+	
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
-
 		if (self.started) {
-			self.addBranddeur();
-			self.updateHead();
-			self.updateBranddeuren();
-			self.updateScore();
-			
+			if (!self.paused) {
+				self.addBranddeur();
+				self.updateHead();
+				self.updateBranddeuren();
+				
+				self.checkCollision();
+				
+				self.updateScore();
+				
+				self.drawBranddeuren();
+			}
 			self.drawHead();
-			self.drawBranddeuren();
 		} else {
 			self.drawStartScreen();
 		}
-		
 		requestAnimationFrame(self.draw);
-	}
+	};
 };
 
 window.Game = Game;

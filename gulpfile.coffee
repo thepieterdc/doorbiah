@@ -14,7 +14,8 @@ cssOut = ['assets/css', 'combined.min.css']
 ### JS ###
 jsIn = 'assets/js/src/**/*.js'
 jsOut = ['assets/js', 'combined.min.js']
-vendorIn = ['node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js']
+vendorIn = ['node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js',
+	'node_modules/bootstrap/dist/js/bootstrap.min.js']
 vendorOut = ['assets/js', 'vendor.min.js']
 
 gulp.task 'css', () ->
@@ -29,9 +30,9 @@ gulp.task 'css', () ->
 
 gulp.task 'js', () ->
 	gulp.src(jsIn)
-		.pipe(do babel)
+		.pipe(babel {presets: ['es2015']})
 		.pipe(concat jsOut[1])
-#		.pipe(do uglify)
+		.pipe(do uglify)
 		.pipe(gulp.dest jsOut[0])
 	
 	gulp.src(vendorIn)
