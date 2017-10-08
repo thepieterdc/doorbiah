@@ -2,9 +2,9 @@ const $scoreDisplay = $("#score-display");
 
 const Branddeur = function (canvas, x, y, dx, dy) {
 	const self = this;
-	
-	this.RATIO = 56.96 / 64;
-	this.width = Math.ceil( Math.random()*20 + 46 );
+
+	this.RATIO = 1024 / 1138;
+	this.width = Math.ceil( Math.random()*20 + 65 );
 	this.height = this.width / this.RATIO;
 
 	this.x = x;
