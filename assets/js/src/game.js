@@ -49,8 +49,6 @@ const Head = function (canvas) {
 		dy = self.moveDown ? -3 : dy;
 		
 		if (self.y_center() - dy > 0 && self.y - dy < canvas.height) {
-			console.log(self.y);
-			console.log(canvas.height);
 			self.y -= dy;
 		}
 	};
