@@ -34,7 +34,15 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 			self.out_of_bounds = true;
 		}
 	};
-	
+
+	this.collides = function (head) {
+		let headX = head.x + head.width/2,
+			headY = head.y + head.height/2;
+
+		return (headX > self.x && headX < self.x + self.width &&
+				headY > self.y && headY < self.y + self.height);
+	};
+
 	this.load_image();
 };
 
@@ -261,13 +269,25 @@ const Game = function (canvas, ctx) {
 			}
 		}
 	};
-	
+
+	this.checkCollision = function () {
+		self.branddeuren.forEach(branddeur => branddeur.collides(self.head) && self.gameOver());
+	}
+
+	let counter = 0;
+	this.gameOver = function() {
+		console.log(`Collision ${++counter}`);
+	}
+
 	this.draw = function () {
 		self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
 		
 		self.addBranddeur();
 		self.updateHead();
 		self.updateBranddeuren();
+
+		self.checkCollision();
+
 		self.updateScore();
 		
 		self.drawHead();
