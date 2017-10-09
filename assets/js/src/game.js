@@ -1,11 +1,10 @@
 const $scoreDisplay = $("#score-display");
 
-const Branddeur = function (canvas, x, y, dx, dy) {
+const Branddeur = function (canvas, w, h, x, y, dx, dy) {
 	const self = this;
 
-	this.RATIO = 1024 / 1138;
-	this.width = Math.ceil( Math.random()*20 + 65 );
-	this.height = this.width / this.RATIO;
+	this.width = w;
+	this.height = h;
 
 	this.x = x;
 	this.y = y;
@@ -54,6 +53,7 @@ const Branddeur = function (canvas, x, y, dx, dy) {
 	
 	this.load_image();
 };
+Branddeur.RATIO = 1024 / 1138;
 
 const Head = function (canvas) {
 	const self = this;
@@ -176,22 +176,25 @@ const Game = function (canvas, ctx, doneFn) {
 	};
 	
 	this.addBranddeur = function () {
-		let start_x;
-		let start_y;
-		let speed_x;
-		let speed_y;
 		if (self.branddeur_counter === 0) {
-			start_x = Math.random() > 0.5 ? 0 : canvas.width;
-			start_y = Math.random() > 0.5 ? 0 : canvas.height;
+			let width, height;
+			let start_x, start_y;
+			let speed_x, speed_y;
+
+			width = Math.ceil( Math.random()*20 + 65 );
+			height = width / Branddeur.RATIO;
+
+			start_x = Math.random() > 0.5 ? -width : canvas.width;
+			start_y = Math.random() > 0.5 ? -height : canvas.height;
 
 			speed_x = 0;
 			speed_y = 0;
 			while (speed_x === 0 && speed_y === 0) {
-				speed_x = Math.random() * 6 * (start_x === 0 ? 1 : -1);
-				speed_y = Math.random() * 6 * (start_y === 0 ? 1 : -1);
+				speed_x = Math.random() * 6 * (start_x === -width  ? 1 : -1);
+				speed_y = Math.random() * 6 * (start_y === -height ? 1 : -1);
 			}
 
-			self.branddeuren.push(new Branddeur(canvas, start_x, start_y, speed_x, speed_y));
+			self.branddeuren.push(new Branddeur(canvas, width, height, start_x, start_y, speed_x, speed_y));
 
 			self.branddeur_counter = 60;
 		} else {
