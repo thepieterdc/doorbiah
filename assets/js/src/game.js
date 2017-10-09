@@ -154,6 +154,7 @@ const Game = function (canvas, ctx, doneFn) {
 	const self = this;
 	this.canvas = canvas;
 	this.ctx = ctx;
+	this.firstScore = undefined;
 	this.score = 0;
 	this.lives = 2;
 	
@@ -285,7 +286,7 @@ const Game = function (canvas, ctx, doneFn) {
 		self.score += 0.03;
 		if (self.score !== 0) {
 			if (self.herexamen) {
-				$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score * 1.42857143) + ' (= 14/20)'));
+				$scoreDisplay.text(Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' (= 14/20)');
 			} else {
 				$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score) * 10) + ' (= 2/20)');
 			}
@@ -309,12 +310,16 @@ const Game = function (canvas, ctx, doneFn) {
 			show_alert('Gebuisd!', 'Je hebt gefaalt. Maar geen nood, je krijgt nog een herkansing. Het herexamen begint nu.', function () {
 				self.paused = false;
 			});
+			self.firstScore = self.score;
+			self.score = 0;
 			self.herexamen = true;
 			self.branddeuren.length = 0;
 		} else if (self.lives === 0) {
 			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
 			if (typeof doneFn !== "undefined") {
-				doneFn();
+				let firstScore = Math.ceil(self.firstScore) + '/' + (Math.ceil(self.firstScore) * 10) + ' (= 2/20)',
+					secondScore = Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' (= 14/20)';
+				doneFn(firstScore, secondScore);
 			}
 		}
 	};
