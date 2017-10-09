@@ -231,19 +231,19 @@ const Game = function (canvas, ctx, doneFn) {
 			}
 		}
 		
-		if (e.keyCode === 37) { // ←
+		if (e.keyCode === 37 || e.keyCode === 72) { // ← or h
 			self.head.activateDirection("left");
 		}
 		
-		if (e.keyCode === 38) { // ↑
+		if (e.keyCode === 38 || e.keyCode === 75) { // ↑ or k
 			self.head.activateDirection("up");
 		}
 		
-		if (e.keyCode === 39) { // →
+		if (e.keyCode === 39 || e.keyCode === 76) { // → or l
 			self.head.activateDirection("right");
 		}
 		
-		if (e.keyCode === 40) { // ↓
+		if (e.keyCode === 40 || e.keyCode === 74) { // ↓ or j
 			self.head.activateDirection("down");
 		}
 	};
@@ -253,19 +253,19 @@ const Game = function (canvas, ctx, doneFn) {
 			self.head.toggle_mouth(false);
 		}
 		
-		if (e.keyCode === 37) { // ←
+		if (e.keyCode === 37 || e.keyCode === 72) { // ← or h
 			self.head.deactivateDirection("left");
 		}
 		
-		if (e.keyCode === 38) { // ↑
+		if (e.keyCode === 38 || e.keyCode === 75) { // ↑ or k
 			self.head.deactivateDirection("up");
 		}
 		
-		if (e.keyCode === 39) { // →
+		if (e.keyCode === 39 || e.keyCode === 76) { // → or l
 			self.head.deactivateDirection("right");
 		}
 		
-		if (e.keyCode === 40) { // ↓
+		if (e.keyCode === 40 || e.keyCode === 74) { // ↓ or j
 			self.head.deactivateDirection("down");
 		}
 	};
