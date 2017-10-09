@@ -286,12 +286,12 @@ const Game = function (canvas, ctx, doneFn) {
 	};
 	
 	this.updateScore = function () {
-		self.score += 0.03;
+		self.score += 0.3;
 		if (self.score !== 0) {
 			if (self.herexamen) {
-				$scoreDisplay.text(Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' (= 14/20)');
+				$scoreDisplay.text(Math.ceil(Math.ceil(self.score / 10) / 0.142857143) + '/' + (Math.ceil(self.score/10) * 10) + ' (= 14/20)');
 			} else {
-				$scoreDisplay.text(Math.ceil(self.score) + '/' + (Math.ceil(self.score) * 10) + ' (= 2/20)');
+				$scoreDisplay.text(Math.ceil(self.score / 10) + '/' + (Math.ceil(self.score/10) * 10) + ' (= 2/20)');
 			}
 		} else {
 			if (self.herexamen) {
@@ -320,8 +320,8 @@ const Game = function (canvas, ctx, doneFn) {
 		} else if (self.lives === 0) {
 			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
 			if (typeof doneFn !== "undefined") {
-				let firstScore = Math.ceil(self.firstScore) + '/' + (Math.ceil(self.firstScore) * 10) + ' <span class="scoreEquiv">(= 2/20)</span">',
-					secondScore = Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' <span class="scoreEquiv">(= 14/20)</span">';
+				let firstScore = Math.ceil(self.firstScore / 10) + '/' + (Math.ceil(self.firstScore/10) * 10) + ' <span class="scoreEquiv">(= 2/20)</span">',
+					secondScore = Math.ceil(Math.ceil(self.score / 10) / 0.142857143) + '/' + (Math.ceil(self.score/10) * 10) + ' <span class="scoreEquiv">(= 14/20)</span">';
 				doneFn(firstScore, secondScore);
 			}
 		}
