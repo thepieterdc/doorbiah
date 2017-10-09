@@ -317,8 +317,8 @@ const Game = function (canvas, ctx, doneFn) {
 		} else if (self.lives === 0) {
 			show_alert('Game over.', 'Ja, kijk euh … ge hebt het, of ge hebt het niet, éh. En gij hebt het duidelijk niet. Vakken meenemen, daar doet Tobiah niet aan mee.');
 			if (typeof doneFn !== "undefined") {
-				let firstScore = Math.ceil(self.firstScore) + '/' + (Math.ceil(self.firstScore) * 10) + ' (= 2/20)',
-					secondScore = Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' (= 14/20)';
+				let firstScore = Math.ceil(self.firstScore) + '/' + (Math.ceil(self.firstScore) * 10) + ' <span class="scoreEquiv">(= 2/20)</span">',
+					secondScore = Math.ceil(self.score) + '/' + Math.ceil(self.score * 1.42857143) + ' <span class="scoreEquiv">(= 14/20)</span">';
 				doneFn(firstScore, secondScore);
 			}
 		}
